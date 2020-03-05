@@ -1,21 +1,30 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
+-- Tabella contenente i dati del giocatore
 Player = {}
 
+-- Tabella contenente i dati del gioco (stato, etc.)
 Game = {}
 
+-- Tabella contenente le informazioni sui massi in caduta
 FallingBoulders = {}
 
+-- Funzione di callback lanciata da PICO-8 quando parte il gioco
 function _init()
   Game.status = "start"
   ResetGame()
 end
 
+-- Funzione di callback lanciata da PICO-8 ad ogni frame
+-- ed utilizzate per effettuare calcoli
 function _update()
+  -- Controllo le interazioni del giocatore
   CheckKeyPress()
 end
 
+-- Funzione di callback lanciata da PICO-8 ad ogni frame
+-- ed utilizzate per 'disegnare' sullo schermo
 function _draw()
   cls()
   if(Game.status == "start") then
