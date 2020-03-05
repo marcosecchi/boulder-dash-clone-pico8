@@ -7,7 +7,7 @@ Game = {}
 
 function _init()
   Game.status = "start"
-  InitPlayer()
+  ResetGame()
 end
 
 function _update()
@@ -73,7 +73,14 @@ function CheckKeyPress()
 end
 
 function ResetGame()
--- Ricaricare la mappa
+  map = {}
+  for i, row in pairs(mapTemplate) do
+    local r = {}
+    add(map, r)
+    for j, key in pairs(row) do
+      add(r, key)      
+    end
+  end
   InitPlayer()
 end
 
@@ -101,7 +108,9 @@ function DrawEndScreen()
   print("press 'z' to replay", 27, 60, 6)
 end
 
-map = {
+map = {}
+
+mapTemplate = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 4, 4, 4, 4, 1},
     {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
