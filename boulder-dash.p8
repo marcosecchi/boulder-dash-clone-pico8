@@ -5,6 +5,8 @@ Player = {}
 
 Game = {}
 
+FallingBoulders = {}
+
 function _init()
   Game.status = "start"
   ResetGame()
@@ -47,15 +49,19 @@ function CheckKeyPress()
   -- Calcolo il possibile movimento verticale del giocatore
   if(btnp(2)) then           -- Movimento in alto
     nextPosY = nextPosY - 1
+    sfx(0)
   elseif(btnp(3)) then       -- Movimento in basso
     nextPosY = nextPosY + 1
+    sfx(0)
   end  
 
   -- Calcolo il possibile movimento orizzontale del giocatore
   if(btnp(0)) then           -- Movimento a sinistra
     nextPosX = nextPosX - 1
+    sfx(0)
   elseif(btnp(1)) then       -- Movimento a destra
     nextPosX = nextPosX + 1
+    sfx(0)
   end
 
   -- Trovo il tipo di tile dove andrà a posizionarsi il giocatore
@@ -69,6 +75,32 @@ function CheckKeyPress()
     Player.posY = nextPosY
   else
     -- Fermo, ha colpito il muro
+  end
+
+  UpdateBoulders()
+end
+
+function UpdateBoulders()
+  for i, k in pairs(FallingBoulders) do
+    map[k.row][k.column] = 7
+    map[k.row + 1][k.column] = 6
+    if(Player.posX == k.column and Player.posY == k.row + 1) then
+--      DeadSound:play()
+      Game.status = "game over"
+    end
+  end
+
+  FallingBoulders = {}
+
+  for i, row in pairs(map) do
+    for j, column in pairs(row) do
+    if(map[i][j] == 6 and map[i + 1][j] == 7) then
+        local b = {}
+        b.column = j
+        b.row = i
+        add(FallingBoulders, b)
+      end
+    end
   end
 end
 
@@ -97,9 +129,6 @@ function DrawMap()
       end
     end
   end
-
-  spr(nextTile, 90, 90)
-
 end
 
 function DrawStartScreen()
@@ -136,3 +165,5 @@ __gfx__
 00700700d11dd11d77144771477714774444144f0407704014414444000000000000000000000000000000000000000000000000000000000000000000000000
 00000000d61dd61d44144441444414441ff4f4410095590001449440000000000000000000000000000000000000000000000000000000000000000000000000
 00000000dddddddd11111111111111114f44444f0770077000111400000000000000000000000000000000000000000000000000000000000000000000000000
+__sfx__
+000100000003000030000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
