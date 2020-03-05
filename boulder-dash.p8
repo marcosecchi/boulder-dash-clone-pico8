@@ -44,10 +44,12 @@ end
 
 function CheckKeyPress()
   if(Game.status == "start" and btnp(4)) then
+    sfx(2)
     Game.status = "play"
     return
   elseif (Game.status == "game over" and btnp(4)) then
     ResetGame()
+    sfx(2)
     Game.status = "start"
     return
   end
@@ -55,57 +57,60 @@ function CheckKeyPress()
   local nextPosX = Player.posX
   local nextPosY = Player.posY
 
+  local moveInputPressed
+
   -- Calcolo il possibile movimento verticale del giocatore
   if(btnp(2)) then           -- Movimento in alto
     nextPosY = nextPosY - 1
-    sfx(0)
-    UpdateBoulders()
+    moveInputPressed = true
   elseif(btnp(3)) then       -- Movimento in basso
     nextPosY = nextPosY + 1
-    sfx(0)
-    UpdateBoulders()
+    moveInputPressed = true
   end  
 
   -- Calcolo il possibile movimento orizzontale del giocatore
   if(btnp(0)) then           -- Movimento a sinistra
     nextPosX = nextPosX - 1
-    sfx(0)
-    UpdateBoulders()
+    moveInputPressed = true
   elseif(btnp(1)) then       -- Movimento a destra
     nextPosX = nextPosX + 1
-    sfx(0)
-    UpdateBoulders()
+    moveInputPressed = true
   end
 
   -- Trovo il tipo di tile dove andrà a posizionarsi il giocatore
-  nextTile = map[nextPosY + 1][nextPosX + 1]
+  nextTile = Map[nextPosY + 1][nextPosX + 1]
   
   -- Se è possibile muoversi (terreno vuoto o scavabile) aggiorno la posizione
   -- del giocatore, emettendo i suoni corrispondenti
   if(nextTile != 1 and nextTile != 2 and nextTile != 3 and nextTile != 6) then
-    map[Player.posY + 1][Player.posX + 1] = 7
+    Map[Player.posY + 1][Player.posX + 1] = 7
     Player.posX = nextPosX
     Player.posY = nextPosY
   else
     -- Fermo, ha colpito il muro
   end
+
+  if(moveInputPressed) then
+    sfx(0)
+    UpdateBoulders()
+  end
 end
 
 function UpdateBoulders()
   for i, k in pairs(FallingBoulders) do
-    map[k.row][k.column] = 7
-    map[k.row + 1][k.column] = 6
-    if(Player.posX == k.column and Player.posY == k.row + 1) then
---      DeadSound:play()
+    Map[k.row][k.column] = 7
+    Map[k.row + 1][k.column] = 6
+    if(Player.posX + 1 == k.column and Player.posY + 1 == k.row + 1) then
+      sfx(1)
       Game.status = "game over"
     end
   end
 
   FallingBoulders = {}
 
-  for i, row in pairs(map) do
+  for i, row in pairs(Map) do
     for j, column in pairs(row) do
-    if(map[i][j] == 6 and map[i + 1][j] == 7) then
+    if(Map[i][j] == 6 and Map[i + 1][j] == 7) then
         local b = {}
         b.column = j
         b.row = i
@@ -116,10 +121,11 @@ function UpdateBoulders()
 end
 
 function ResetGame()
-  map = {}
+  Map = {}
+  FallingBoulders = {}
   for i, row in pairs(mapTemplate) do
     local r = {}
-    add(map, r)
+    add(Map, r)
     for j, key in pairs(row) do
       add(r, key)      
     end
@@ -133,7 +139,7 @@ end
 
 function DrawMap()
   -- Ridisegna la mappa escludendo la tile dove si trova il giocatore
-  for i, row in pairs(map) do
+  for i, row in pairs(Map) do
     for j, key in pairs(row) do
       if(j - 1 != Player.posX or i - 1 != Player.posY) then
         spr(key, (j - 1) * 8, (i - 1) * 8)
@@ -152,7 +158,7 @@ function DrawEndScreen()
   print("press 'z' to replay", 27, 60, 6)
 end
 
-map = {}
+Map = {}
 
 mapTemplate = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -177,4 +183,6 @@ __gfx__
 00000000d61dd61d44144441444414441ff4f4410095590001449440000000000000000000000000000000000000000000000000000000000000000000000000
 00000000dddddddd11111111111111114f44444f0770077000111400000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-000100000003000030000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000100000705006050060700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00040000336502b65029650216501c65017650106500b65006650036500165000600006002f600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+001000002d150311502b1001b1001b100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
