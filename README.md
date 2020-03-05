@@ -19,4 +19,3 @@ L'idea è di dare un contributo concreto alle nuove generazioni, mostrando loro 
 #### Eseguibili
 
 * Scaricare l'ultima versione disponibile dalla sezione [Releases](https://github.com/marcosecchi/boulder-dash-clone-pico8/releases)
-
