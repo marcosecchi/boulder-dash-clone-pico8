@@ -11,5 +11,12 @@ L'idea è di dare un contributo concreto alle nuove generazioni, mostrando loro 
 
 ### Istruzioni
 
+#### Da PICO-8
+
 * Carica il file _.p8_ con PICO-8
 * Lancia il comando _run_
+
+#### Eseguibili
+
+* Scaricare l'ultima versione disponibile dalla sezione [Releases](https://github.com/marcosecchi/boulder-dash-clone-pico8/releases)
+
