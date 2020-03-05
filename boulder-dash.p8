@@ -50,18 +50,22 @@ function CheckKeyPress()
   if(btnp(2)) then           -- Movimento in alto
     nextPosY = nextPosY - 1
     sfx(0)
+    UpdateBoulders()
   elseif(btnp(3)) then       -- Movimento in basso
     nextPosY = nextPosY + 1
     sfx(0)
+    UpdateBoulders()
   end  
 
   -- Calcolo il possibile movimento orizzontale del giocatore
   if(btnp(0)) then           -- Movimento a sinistra
     nextPosX = nextPosX - 1
     sfx(0)
+    UpdateBoulders()
   elseif(btnp(1)) then       -- Movimento a destra
     nextPosX = nextPosX + 1
     sfx(0)
+    UpdateBoulders()
   end
 
   -- Trovo il tipo di tile dove andrà a posizionarsi il giocatore
@@ -76,8 +80,6 @@ function CheckKeyPress()
   else
     -- Fermo, ha colpito il muro
   end
-
-  UpdateBoulders()
 end
 
 function UpdateBoulders()
